@@ -25,9 +25,13 @@ class Arsenal:
         self.remove_bullets_offscreen()
 
     def remove_bullets_offscreen(self):
-        # Remove bullets that have disappeared off the top of the screen
+        # Remove bullets that have disappeared off the any part of the screen
+        screen_rect = self.game.screen.get_rect()
         for bullet in self.arsenal.copy():
-            if bullet.rect.bottom <= 0:
+            if (bullet.rect.bottom <= 0 or
+                bullet.rect.top >= screen_rect.height or
+                bullet.rect.right <= 0 or
+                bullet.rect.left >= screen_rect.width):
                 self.arsenal.remove(bullet)
 
     def draw(self):

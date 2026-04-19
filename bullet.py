@@ -16,23 +16,50 @@ class Bullet(Sprite):
     def __init__(self, game: 'AlienInvasion'):
         # Initialize the bullet and set its starting position
         super().__init__()
-        
+
         self.screen = game.screen
         self.settings = game.settings
+        self.angle = game.ship.current_angle
 
+        # Load the bullet image
         self.image = pygame.image.load(self.settings.bullet_file)
-        self.image = pygame.transform.scale(self.image, 
-            (self.settings.bullet_w, self.settings.bullet_h)
-            )
-        
+
+        # Rotate the bullet image based on the ship's current angle
+        if self.angle in [0, 180]:  # Facing up or down
+            self.image = pygame.transform.rotate(self.image, self.angle)
+        else:  # Facing left or right
+            self.image = pygame.transform.rotate(self.image, self.angle)
+     
+        # Get the rect of the bullet based on the rotated image
         self.rect = self.image.get_rect()
-        self.rect.midtop = game.ship.rect.midtop
+        
+        # Set the rect's center to match the ship's corresponding spawn point for correct alignment
+        if self.angle == 0:    # Up - spawn from top center
+            self.rect.center = game.ship.rect.midtop
+        elif self.angle == 180: # Down - spawn from bottom center
+            self.rect.center = game.ship.rect.midbottom
+        elif self.angle == -90: # Right - spawn from right center
+            self.rect.center = game.ship.rect.midright
+        elif self.angle == 90:  # Left - spawn from left center
+            self.rect.center = game.ship.rect.midleft
+
+        # Store the bullet's position as a decimal value for more precise movement
+        self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
     def update(self):
         # Move the bullet up the screen
-        self.y -= self.settings.bullet_speed
+        if self.angle == 0:    # Up
+            self.y -= self.settings.bullet_speed
+        elif self.angle == 180: # Down
+            self.y += self.settings.bullet_speed
+        elif self.angle == -90: # Right
+            self.x += self.settings.bullet_speed
+        elif self.angle == 90:  # Left
+             self.x -= self.settings.bullet_speed
+
         self.rect.y = self.y
+        self.rect.x = self.x
 
     def draw_bullet(self):
         # Draw the bullet to the screen
