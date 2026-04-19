@@ -1,3 +1,10 @@
+"""
+Final Project: Alien Invasion
+Ethan Swearingen
+The purpose of this project is to have a ship that can move around and destroy the aliens that come onto the screen
+Starter code is from https://github.com/RedBeard41/alien_Invasion_starter , and from the tutorials posted by Proffessor RedBeard
+04/19/2026
+"""
 from pathlib import Path
 class Settings:
 

@@ -1,3 +1,10 @@
+"""
+Final Project: Alien Invasion
+Ethan Swearingen
+The purpose of this project is to have a ship that can move around and destroy the aliens that come onto the screen
+Starter code is from https://github.com/RedBeard41/alien_Invasion_starter , and from the tutorials posted by Proffessor RedBeard
+04/19/2026
+"""
 import sys
 import pygame
 from settings import Settings
@@ -30,7 +37,6 @@ class AlienInvasion:
         self.ship = Ship(self, Arsenal(self))
 
     def run_game(self):
-        #Game loop
         while self.running:
             self._check_events()
             self.ship.update()
@@ -64,6 +70,8 @@ class AlienInvasion:
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
+        #elif event.key == pygame.K_UP:
+
         elif event.key == pygame.K_SPACE:
             if self.ship.fire():
                 self.laser_sound.play()
