@@ -14,18 +14,18 @@ if TYPE_CHECKING:
 
 class Arsenal: 
     def __init__(self, game: 'AlienInvasion'):
-        # Initialize the arsenal
+        """Initialize the arsenal with an empty bullet group."""
         self.game = game
         self.settings = game.settings
         self.arsenal = pygame.sprite.Group()
 
     def update_arsenal(self):
-        # Update the position of the bullets and get rid of old bullets
+        """Update the position of all bullets and remove off-screen bullets."""
         self.arsenal.update()
         self.remove_bullets_offscreen()
 
     def remove_bullets_offscreen(self):
-        # Remove bullets that have disappeared off the any part of the screen
+        """Remove bullets that have moved off any edge of the screen."""
         screen_rect = self.game.screen.get_rect()
         for bullet in self.arsenal.copy():
             if (bullet.rect.bottom <= 0 or
@@ -35,12 +35,12 @@ class Arsenal:
                 self.arsenal.remove(bullet)
 
     def draw(self):
-        # Draw the bullets to the screen
+        """Draw all active bullets to the screen."""
         for bullet in self.arsenal:
             bullet.draw_bullet()
 
     def fire_bullet(self):
-        # Fire a bullet if the limit has not been reached yet, and play the laser sound effect
+        """Create and add a new bullet if the bullet limit has not been reached."""
         if len(self.arsenal) < self.settings.bullet_amount:
             new_bullet = Bullet(self.game)
             self.arsenal.add(new_bullet)

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 class Bullet(Sprite):
     def __init__(self, game: 'AlienInvasion'):
-        # Initialize the bullet and set its starting position
+        """Initialize the bullet and set its starting position."""
         super().__init__()
 
         self.screen = game.screen
@@ -24,31 +24,28 @@ class Bullet(Sprite):
         # Load the bullet image
         self.image = pygame.image.load(self.settings.bullet_file)
 
-        # Rotate the bullet image based on the ship's current angle
-        if self.angle in [0, 180]:  # Facing up or down
-            self.image = pygame.transform.rotate(self.image, self.angle)
-        else:  # Facing left or right
-            self.image = pygame.transform.rotate(self.image, self.angle)
+        # Rotate the bullet image to match the ship's facing direction
+        self.image = pygame.transform.rotate(self.image, self.angle)
      
-        # Get the rect of the bullet based on the rotated image
+        # Get the rect from the rotated image
         self.rect = self.image.get_rect()
         
-        # Set the rect's center to match the ship's corresponding spawn point for correct alignment
-        if self.angle == 0:    # Up - spawn from top center
+        # Set spawn point based on ship's facing direction
+        if self.angle == 0:    # Up
             self.rect.center = game.ship.rect.midtop
-        elif self.angle == 180: # Down - spawn from bottom center
+        elif self.angle == 180: # Down
             self.rect.center = game.ship.rect.midbottom
-        elif self.angle == -90: # Right - spawn from right center
+        elif self.angle == -90: # Right
             self.rect.center = game.ship.rect.midright
-        elif self.angle == 90:  # Left - spawn from left center
+        elif self.angle == 90:  # Left
             self.rect.center = game.ship.rect.midleft
 
-        # Store the bullet's position as a decimal value for more precise movement
+        # Store decimal position for precise movement
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
     def update(self):
-        # Move the bullet up the screen
+        """Move the bullet in the direction the ship is facing."""
         if self.angle == 0:    # Up
             self.y -= self.settings.bullet_speed
         elif self.angle == 180: # Down
@@ -58,9 +55,9 @@ class Bullet(Sprite):
         elif self.angle == 90:  # Left
              self.x -= self.settings.bullet_speed
 
-        self.rect.y = self.y
-        self.rect.x = self.x
+        self.rect.y = int(self.y)
+        self.rect.x = int(self.x)
 
     def draw_bullet(self):
-        # Draw the bullet to the screen
+        """Draw the bullet to the screen."""
         self.screen.blit(self.image, self.rect)

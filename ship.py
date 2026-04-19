@@ -18,13 +18,13 @@ class Ship:
     
     
     def __init__(self, game: 'AlienInvasion', arsenal: 'Arsenal'):
-        # Initialize the ship
+        """Initialize the ship and set its starting position."""
         self.game = game
         self.settings = game.settings
         self.screen = game.screen
         self.boundaries = self.screen.get_rect()
 
-        # Load the ship image once and keep the original for rotation
+        # Load the ship image and keep the original for rotation
         loaded_image = pygame.image.load(self.settings.ship_file)
         self.original_image = pygame.transform.scale(loaded_image, 
             (self.settings.ship_w, self.settings.ship_h)
@@ -32,33 +32,33 @@ class Ship:
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
 
-        # Set the ship's starting position to the center of the screen
+        # Start the ship at the center of the screen
         self.rect.center = self.screen.get_rect().center
         
-        # Set the current angle of the ship to 0 so that it starts facing up
+        # Ship starts facing up (0 degrees)
         self.current_angle = 0 
 
-        # Movement flags
+        # Movement flags for arrow key controls
         self.moving_right = False
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
 
-        # Store a decimal value for the ship's horizontal and vertical position
+        # Store decimal positions for precise movement calculations
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
         self.arsenal = arsenal
 
     def update(self):
-        # Updating the position of the ship
+        """Update the ship's position and arsenal."""
         self._update_ship_movement()
         self.arsenal.update_arsenal()
 
     def _update_ship_movement(self):
+        """Update the ship's position based on movement flags and handle rotation."""
         temp_speed = self.settings.ship_speed
-        angle = 0
-        # Adding this to make a boundary for the ship to not go off the screen and to rotate the ship in the direction it is moving
-        # Also replaced the if statements with elif statements so that the ship can only move in one direction at a time
+        
+        # Check movement flags with boundary constraints and update rotation angle
         if self.moving_right and self.rect.right < self.boundaries.right:
             self.x += temp_speed
             self.current_angle = -90
@@ -72,24 +72,23 @@ class Ship:
             self.y += temp_speed
             self.current_angle = 180
 
-        # Rotate the ship image based on the current angle using the original image
+        # Rotate the ship image based on the current angle
         self.image = pygame.transform.rotate(self.original_image, self.current_angle)
     
-        # After rotating the image, we need to update the rect to match the new image size and keep the center of the ship consistent
+        # Update rect to match new image size while keeping the ship centered
         old_center = self.rect.center
         self.rect = self.image.get_rect()
         self.rect.center = old_center
 
-        # Update the ship's rect object from self.x and self.y
-        self.rect.x = self.x
-        self.rect.y = self.y
+        # Update the ship's rect from decimal position values
+        self.rect.x = int(self.x)
+        self.rect.y = int(self.y)
 
     def draw(self):
-        # Drawing the ship and the bullets to the screen
+        """Draw the ship and its bullets to the screen."""
         self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
     
     def fire(self):
-        # Fire a bullet if the limit has not been reached yet, and play the laser sound effect
+        """Fire a bullet if the limit has not been reached yet."""
         return self.arsenal.fire_bullet()
-    
