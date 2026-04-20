@@ -99,10 +99,13 @@ class AlienInvasion:
                 self.laser_sound.play()
                 self.laser_sound.fadeout(250)
         # Allow the player to quit the game by pressing Q
-        elif event.key == pygame.K_Q:
+        elif event.key == pygame.K_q:
             self.running = False
             pygame.quit()
             sys.exit()
+        # Ignore all other keys so the game doesn't end or error
+        else:
+            pass
 
     def check_collisions(self):
         """Check for collisions between bullets and aliens."""
