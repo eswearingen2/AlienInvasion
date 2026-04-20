@@ -19,6 +19,7 @@ class AlienInvasion:
 
     def __init__(self):
         """Initialize the game and create game resources."""
+        # Initialize pygame and settings
         pygame.init()
         self.settings = Settings()
         self.screen = pygame.display.set_mode(
@@ -42,11 +43,12 @@ class AlienInvasion:
         self.laser_sound = pygame.mixer.Sound(self.settings.laser_sound)
         self.laser_sound.set_volume(0.3)
 
+        # Create main game objects
         self.ship = Ship(self, Arsenal(self))
         self.alien_fleet = AlienFleet(self)
 
     def run_game(self):
-        """Start the main loop for the game."""
+        """Start the main loop for the game. Handles events, updates, collisions, and rendering."""
         while self.running:
             self.check_events()
             self.ship.update()
@@ -58,6 +60,7 @@ class AlienInvasion:
             self.clock.tick(self.settings.FPS)
 
     def _maybe_spawn_wave(self):
+        """Spawn a new wave of aliens if enough time has passed since the last wave."""
         now = time.time()
         if now - self.last_wave_time >= self.settings.wave_spawn_time:
             self.alien_fleet.create_fleet()
@@ -71,7 +74,7 @@ class AlienInvasion:
         pygame.display.flip()
 
     def check_events(self):
-        """Check for events such as key presses and releases, and quitting the game."""
+        """Check for events such as key presses, releases, and quitting the game."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -117,7 +120,7 @@ class AlienInvasion:
             pass
 
     def check_collisions(self):
-        """Check for collisions between bullets and aliens, and ship and aliens."""
+        """Check for collisions between bullets and aliens, and ship and aliens. End game if ship is hit."""
         # Bullet-alien collisions
         collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
         if collisions:

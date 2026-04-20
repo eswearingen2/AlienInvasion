@@ -14,14 +14,14 @@ if TYPE_CHECKING:
     from alien_fleet import AlienFleet
 
 class Alien(Sprite):
-
+    """Class representing a single alien."""
     def __init__(self, fleet: 'AlienFleet', x: float, y: float):
+        """Initialize the alien, set position, and movement direction."""
         super().__init__()
         self.fleet = fleet
         self.screen = fleet.game.screen
         self.boundaries = fleet.game.screen.get_rect()
         self.settings = fleet.game.settings
-
         self.image = pygame.image.load(self.settings.alien_file)
         self.image = pygame.transform.scale(self.image, 
             (self.settings.alien_w, self.settings.alien_h)
@@ -30,6 +30,7 @@ class Alien(Sprite):
         self._set_direction()
 
     def _set_initial_position(self, x, y):
+        """Set the alien's initial position."""
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -37,6 +38,7 @@ class Alien(Sprite):
         self.y = float(self.rect.y)
 
     def _set_direction(self):
+        """Determine if the alien flies straight or toward the center and set direction vector."""
         self.straight = random.random() < 0.5  # 50% chance
         if self.straight:
             if self.rect.y == 0:
@@ -68,6 +70,7 @@ class Alien(Sprite):
                 self.dir_y = 0
 
     def update(self):
+        """Move the alien in its assigned direction."""
         temp_speed = self.settings.fleet_speed
         self.x += temp_speed * self.dir_x
         self.y += temp_speed * self.dir_y
@@ -75,8 +78,9 @@ class Alien(Sprite):
         self.rect.y = int(self.y)
 
     def check_edges(self):
+        """Return True if alien is at the edge of the screen."""
         return (self.rect.right >= self.boundaries.right or self.rect.left <= self.boundaries.left)
 
-
     def draw_alien(self):
+        """Draw the alien to the screen."""
         self.screen.blit(self.image, self.rect)

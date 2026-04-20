@@ -13,22 +13,22 @@ if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class AlienFleet:
-
+    """Class representing the fleet of aliens."""
     def __init__(self, game: 'AlienInvasion'):
+        """Initialize the fleet and create the first wave of aliens."""
         self.game = game
         self.settings = game.settings
         self.fleet = pygame.sprite.Group()
         self.fleet_direction = self.settings.fleet_direction
         self.fleet_drop_speed = self.settings.fleet_drop_speed
-
         self.create_fleet()
 
     def create_fleet(self):
+        """Spawn aliens along all four walls of the screen."""
         alien_w = self.settings.alien_w
         alien_h = self.settings.alien_h
         screen_w = self.settings.screen_w
         screen_h = self.settings.screen_h
-
         # Top wall
         for x in range(0, screen_w, alien_w * 2):
             self._create_alien(x, 0)
@@ -43,34 +43,38 @@ class AlienFleet:
             self._create_alien(screen_w - alien_w, y)
 
     def _create_alien(self, current_x: int, current_y: int):
+        """Create a single alien and add it to the fleet."""
         new_alien = Alien(self, current_x, current_y)
         self.fleet.add(new_alien)
 
     def _check_fleet_edges(self):
-        # Disable classic fleet edge/drop logic for center/straight movement
+        """(Disabled) Classic fleet edge logic not used for center/straight movement."""
         pass
-    
+
     def _drop_alien_fleet(self):
+        """(Disabled) Classic fleet drop logic not used for center/straight movement."""
         pass
 
     def update_fleet(self):
-        self._check_fleet_edges()
+        """Update all aliens in the fleet."""
         self.fleet.update()
 
     def draw(self):
-        alien: 'Alien'
+        """Draw all aliens in the fleet to the screen."""
         for alien in self.fleet:
             alien.draw_alien()
 
     def check_collisions(self, other_group):
+        """Check for collisions between the fleet and another group (e.g., bullets)."""
         return pygame.sprite.groupcollide(self.fleet, other_group, True, True)
     
     def check_fleet_bottom(self):
-        alien: 'Alien'
+        """Return True if any alien has reached the bottom of the screen."""
         for alien in self.fleet:
             if alien.rect.bottom >= self.settings.screen_h:
                 return True
         return False
     
     def check_destroyed_status(self):
+        """Return True if all aliens in the fleet are destroyed."""
         return not self.fleet

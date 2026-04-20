@@ -2,7 +2,7 @@
 Final Project: Alien Invasion
 Ethan Swearingen
 The purpose of this project is to have a ship that can move around and destroy the aliens that come onto the screen
-Starter code is from https://github.com/RedBeard41/alien_Invasion_starter , and from the tutorials posted by Proffessor RedBeard
+Starter code is from https://github.com/RedBeard41/alien_Invasion_starter , and from the tutorials posted by Professor RedBeard
 04/19/2026
 """
 import pygame
@@ -12,7 +12,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
-class Arsenal: 
+class Arsenal:
+    """Class representing the player's arsenal of bullets."""
     def __init__(self, game: 'AlienInvasion'):
         """Initialize the arsenal with an empty bullet group."""
         self.game = game

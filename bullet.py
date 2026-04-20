@@ -2,8 +2,13 @@
 Final Project: Alien Invasion
 Ethan Swearingen
 The purpose of this project is to have a ship that can move around and destroy the aliens that come onto the screen
-Starter code is from https://github.com/RedBeard41/alien_Invasion_starter , and from the tutorials posted by Proffessor RedBeard
+Starter code is from https://github.com/RedBeard41/alien_Invasion_starter , and from the tutorials posted by Professor RedBeard
 04/19/2026
+"""
+
+"""
+Bullet class for Alien Invasion game.
+Handles bullet movement and drawing.
 """
 import pygame
 from pygame.sprite import Sprite
@@ -13,24 +18,16 @@ if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class Bullet(Sprite):
+    """Class representing a single bullet fired by the ship."""
     def __init__(self, game: 'AlienInvasion'):
         """Initialize the bullet and set its starting position."""
         super().__init__()
-
         self.screen = game.screen
         self.settings = game.settings
         self.angle = game.ship.current_angle
-
-        # Load the bullet image
         self.image = pygame.image.load(self.settings.bullet_file)
-
-        # Rotate the bullet image to match the ship's facing direction
         self.image = pygame.transform.rotate(self.image, self.angle)
-     
-        # Get the rect from the rotated image
         self.rect = self.image.get_rect()
-        
-        # Set spawn point based on ship's facing direction
         if self.angle == 0:    # Up
             self.rect.center = game.ship.rect.midtop
         elif self.angle == 180: # Down
@@ -39,8 +36,6 @@ class Bullet(Sprite):
             self.rect.center = game.ship.rect.midright
         elif self.angle == 90:  # Left
             self.rect.center = game.ship.rect.midleft
-
-        # Store decimal position for precise movement
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
@@ -53,8 +48,7 @@ class Bullet(Sprite):
         elif self.angle == -90: # Right
             self.x += self.settings.bullet_speed
         elif self.angle == 90:  # Left
-             self.x -= self.settings.bullet_speed
-
+            self.x -= self.settings.bullet_speed
         self.rect.y = int(self.y)
         self.rect.x = int(self.x)
 
