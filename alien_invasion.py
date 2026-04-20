@@ -117,11 +117,16 @@ class AlienInvasion:
             pass
 
     def check_collisions(self):
-        """Check for collisions between bullets and aliens."""
+        """Check for collisions between bullets and aliens, and ship and aliens."""
+        # Bullet-alien collisions
         collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
         if collisions:
             self.laser_sound.play()
             self.laser_sound.fadeout(250)
+        # Ship-alien collisions
+        if pygame.sprite.spritecollideany(self.ship, self.alien_fleet.fleet):
+            self.running = False
+            print("Game Over! The ship was hit by an alien.")
 
 
 if __name__ == '__main__':
