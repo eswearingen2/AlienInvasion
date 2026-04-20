@@ -33,3 +33,4 @@ class Settings:
         self.fleet_speed = 0.5
         self.fleet_direction = 1
         self.fleet_drop_speed = 40
+        self.wave_spawn_time = 5

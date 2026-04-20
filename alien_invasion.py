@@ -7,6 +7,7 @@ Starter code is from https://github.com/RedBeard41/alien_Invasion_starter , and 
 """
 import sys
 import pygame
+import time
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
@@ -34,6 +35,7 @@ class AlienInvasion:
 
         self.running = True
         self.clock = pygame.time.Clock()
+        self.last_wave_time = time.time()
 
         # Initialize the mixer for sound playback
         pygame.mixer.init()
@@ -51,8 +53,15 @@ class AlienInvasion:
             self.ship.arsenal.update_arsenal()
             self.alien_fleet.update_fleet()
             self.check_collisions()
+            self._maybe_spawn_wave()
             self.update_screen()
             self.clock.tick(self.settings.FPS)
+
+    def _maybe_spawn_wave(self):
+        now = time.time()
+        if now - self.last_wave_time >= self.settings.wave_spawn_time:
+            self.alien_fleet.create_fleet()
+            self.last_wave_time = now
 
     def update_screen(self):
         """Redraw the screen and flip to the new screen."""
