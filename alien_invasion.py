@@ -10,6 +10,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
+from alien_fleet import AlienFleet
 
 
 class AlienInvasion:
@@ -40,22 +41,27 @@ class AlienInvasion:
         self.laser_sound.set_volume(0.3)
 
         self.ship = Ship(self, Arsenal(self))
+        self.alien_fleet = AlienFleet(self)
 
     def run_game(self):
         """Start the main loop for the game."""
         while self.running:
-            self._check_events()
+            self.check_events()
             self.ship.update()
-            self._update_screen()
+            self.ship.arsenal.update_arsenal()
+            self.alien_fleet.update_fleet()
+            self.check_collisions()
+            self.update_screen()
             self.clock.tick(self.settings.FPS)
 
-    def _update_screen(self):
+    def update_screen(self):
         """Redraw the screen and flip to the new screen."""
         self.screen.blit(self.bg, (0, 0))
         self.ship.draw()
+        self.alien_fleet.draw()
         pygame.display.flip()
 
-    def _check_events(self):
+    def check_events(self):
         """Check for events such as key presses and releases, and quitting the game."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -63,11 +69,11 @@ class AlienInvasion:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                self._check_keydown_events(event)
+                self.check_keydown_events(event)
             elif event.type == pygame.KEYUP:
-                self._check_keyup_events(event)
+                self.check_keyup_events(event)
 
-    def _check_keyup_events(self, event):
+    def check_keyup_events(self, event):
         """Check for key releases and set the movement flags accordingly."""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
@@ -78,7 +84,7 @@ class AlienInvasion:
         elif event.key == pygame.K_DOWN:
             self.ship.moving_down = False
 
-    def _check_keydown_events(self, event):
+    def check_keydown_events(self, event):
         """Check for key presses and set the movement flags accordingly."""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
@@ -97,6 +103,13 @@ class AlienInvasion:
             self.running = False
             pygame.quit()
             sys.exit()
+
+    def check_collisions(self):
+        """Check for collisions between bullets and aliens."""
+        collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
+        if collisions:
+            self.laser_sound.play()
+            self.laser_sound.fadeout(250)
 
 
 if __name__ == '__main__':
