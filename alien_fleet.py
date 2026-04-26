@@ -19,8 +19,6 @@ class AlienFleet:
         self.game = game
         self.settings = game.settings
         self.fleet = pygame.sprite.Group()
-        self.fleet_direction = self.settings.fleet_direction
-        self.fleet_drop_speed = self.settings.fleet_drop_speed
         self.create_fleet()
 
     def create_fleet(self):
@@ -47,14 +45,6 @@ class AlienFleet:
         new_alien = Alien(self, current_x, current_y)
         self.fleet.add(new_alien)
 
-    def _check_fleet_edges(self):
-        """(Disabled) Classic fleet edge logic not used for center/straight movement."""
-        pass
-
-    def _drop_alien_fleet(self):
-        """(Disabled) Classic fleet drop logic not used for center/straight movement."""
-        pass
-
     def update_fleet(self):
         """Update all aliens in the fleet."""
         self.fleet.update()
@@ -67,14 +57,3 @@ class AlienFleet:
     def check_collisions(self, other_group):
         """Check for collisions between the fleet and another group (e.g., bullets)."""
         return pygame.sprite.groupcollide(self.fleet, other_group, True, True)
-    
-    def check_fleet_bottom(self):
-        """Return True if any alien has reached the bottom of the screen."""
-        for alien in self.fleet:
-            if alien.rect.bottom >= self.settings.screen_h:
-                return True
-        return False
-    
-    def check_destroyed_status(self):
-        """Return True if all aliens in the fleet are destroyed."""
-        return not self.fleet

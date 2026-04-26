@@ -39,8 +39,8 @@ class Alien(Sprite):
 
     def _set_direction(self):
         """Determine if the alien flies straight or toward the center and set direction vector."""
-        self.straight = random.random() < 0.5  # 50% chance
-        if self.straight:
+        straight = random.random() < 0.5  # 50% chance
+        if straight:
             if self.rect.y == 0:
                 self.dir_x = 0
                 self.dir_y = 1  # Down
@@ -76,10 +76,6 @@ class Alien(Sprite):
         self.y += temp_speed * self.dir_y
         self.rect.x = int(self.x)
         self.rect.y = int(self.y)
-
-    def check_edges(self):
-        """Return True if alien is at the edge of the screen."""
-        return (self.rect.right >= self.boundaries.right or self.rect.left <= self.boundaries.left)
 
     def draw_alien(self):
         """Draw the alien to the screen."""

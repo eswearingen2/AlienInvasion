@@ -90,7 +90,7 @@ class AlienInvasion:
         pygame.display.flip()
 
     def check_events(self):
-        """Check for events such as key presses, releases, and quitting the game."""
+        """Check for events such as key presses, releases, mouse clicks, and quitting the game."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -140,7 +140,7 @@ class AlienInvasion:
             pass
 
     def check_collisions(self):
-        """Check for collisions between bullets and aliens, and ship and aliens. End game if ship is hit."""
+        """Check for collisions between bullets and aliens, updating scores. Handle ship-alien collisions via lives system."""
         # Bullet-alien collisions
         collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
         if collisions:
