@@ -33,7 +33,7 @@ class Ship(pygame.sprite.Sprite):
         )
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
-        self.rect.midbottom = self.screen.get_rect().midbottom
+        self.rect.center = self.screen.get_rect().center
         self.current_angle = 0
         self.moving_right = False
         self.moving_left = False
@@ -81,6 +81,6 @@ class Ship(pygame.sprite.Sprite):
     
     def center_ship(self):
         """Center the ship on the screen and reset its position values."""
-        self.rect.midbottom = self.screen.get_rect().midbottom
+        self.rect.center = self.screen.get_rect().center
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
